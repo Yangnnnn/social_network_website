@@ -1,9 +1,12 @@
 /*jshint esversion: 8 */
 const express = require("express");
-
 const app = express();
-
 const PORT =process.env.PORT||5000;
+
+// Middleware
+//body-parser
+app.use(express.json({extended:false}));
+
 
 //mongoDB setup
 const mongoose = require("mongoose");
@@ -14,6 +17,9 @@ const connectDB = async()=>{
   try{
     await mongoose.connect(mongoDB, {
     useNewUrlParser: true,
+    useCreateIndex:true,
+    useUnifiedTopology: true
+
 });
   console.log("connected to the database");
   }
