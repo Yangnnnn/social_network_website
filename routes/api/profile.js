@@ -59,14 +59,16 @@ body("skills").not().isEmpty().withMessage("Skill is requested")
   if(skills){
     profileFields.skills=skills.split(',').map(skill=>skill.trim())
   }
-  profileFields.social = {}
+  profileFields.social = {};
   if(youtube) profileFields.social.youtube = youtube;
   if(facebook) profileFields.social.facebook = facebook;
   if(twitter) profileFields.twitter = twitter;
   if(instagram) profileFields.instagram = instagram;
   if(linkedin) profileFields.linkedin = linkedin;
+
   try{
-    let profile = Profile.findOne({user:req.user.id});
+    let profile = await Profile.findOne({user:req.user.id});
+    console.log(profile);
     //if we found user ,we update
     if(profile){
      profile = await Profile.findOneAndUpdate({user:req.user.id},
@@ -74,13 +76,11 @@ body("skills").not().isEmpty().withMessage("Skill is requested")
        {new:true}
      );
     return res.json(profile);
-    
     }
     // no user found create a new one
     profile = new Profile(profileFields);
     await profile.save();
     return res.json(profile);
-
   }
   catch(err){
     console.error(err.message);
@@ -88,7 +88,60 @@ body("skills").not().isEmpty().withMessage("Skill is requested")
   }
 });
 
+// @router DELETE api/profile
+// @desc Delete user profile, user and posts
+// @access Private
+router.delete("/",auth,async function(req,res){
+  try {
+    await Profile.findOneAndRemove({user:req.user.id});
+    await User.findOneAndRemove({_id:req.user.id});
+    res.json({msg:"User deleted"});
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
 
+// @router PUT api/profile/experience
+// @desc Add profile experience
+// @access Private
+router.put("/experience",[auth,[body("title").not().isEmpty().withMessage("Title is required"),
+body("company").not().isEmpty().withMessage("Company is required"),body("from").not().isEmpty().withMessage("From Date is required ")]], async function(req,res){
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors:errors.array()})
+  }
+  const {
+    title,
+    company,
+    location,
+    from,
+    to,
+    current,
+    description
+  } = req.body;
+  const exp = {
+    title,
+    company,
+    location,
+    from,
+    to,
+    current,
+    description
+  }
+  try {
+    console.log(req.user.id)
+    const profile = await Profile.findOne({user:req.user.id});
+    console.log(profile)
+    profile.experience.unshift(exp);
+    await profile.save();
+    res.json(profile);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
 
 
 module.exports=router;
