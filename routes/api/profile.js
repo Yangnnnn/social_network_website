@@ -218,7 +218,6 @@ async function(req,res){
 router.delete("/education/:edu_id",auth,async function(req,res){
   try {
     const profile = await Profile.findOne({user:req.user.id});
-    console.log(profile);
     // get remove index
     const edu_index = profile.education.map(item=>item.id).indexOf(req.params.edu_id);
     profile.education.splice(edu_index,1)
@@ -246,7 +245,7 @@ router.get("/github/:username",function(req,res){
         console.error(error);
       }
       if(response.statusCode!==200){
-        res.status(404).json({msg:'No github profile found'});
+        return res.status(404).json({msg:'No github profile found'});
       }
       res.json(JSON.parse(body));
     })
