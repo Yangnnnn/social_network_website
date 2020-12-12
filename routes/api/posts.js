@@ -11,8 +11,7 @@ const { post } = require("request");
 // @router POST api/posts
 // @desc post a new post
 // @access Private  // need login to post
-router.post("/",[auth,[body("text").not().isEmpty().withMessage("Text is required"),
-body("name").not().isEmpty().withMessage("Name is required")]],
+router.post("/",[auth,[body("text").not().isEmpty().withMessage("Text is required")]],
 async function(req,res){
   const errors = validationResult(req);
   if(!errors.isEmpty()){
@@ -136,5 +135,73 @@ router.put("/unlike/:post_id",auth,async function (req,res){
     res.status(500).send("Server error");
   }
 })
+
+// @router PUT api/posts/comment/:post_id
+// @desc comment a post
+// @access Private  // need login to comment a post
+router.put("/comment/:post_id",[auth,[body("text").not().isEmpty().withMessage("Text is required")]],async function (req,res){
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors:errors.array()});
+  }
+  
+  try {
+    const post = await Post.findById(req.params.post_id);
+    const user = await User.findById(req.user.id).select("-password");
+    const comment = {
+      user:req.user.id,
+      text:req.body.text,
+      name:user.name,
+      avatar:user.avatar,
+    };
+    post.comments.unshift(comment);
+    await post.save();
+    res.json(post.comments);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+})
+
+// @router Delete api/posts/comment/:post_id/:comment_id
+// @desc Delete a comment
+// @access Private  // need login to delete a post
+router.put("/comment/:post_id/:comment_id",auth,async function (req,res){
+  try {
+    const post = await Post.findById(req.params.post_id);
+    const comment = post.comments.find(function(comment){
+      if (comment.id===req.params.comment_id){
+        return comment;
+      
+      }
+    })
+    
+    if (!comment){
+      return res.status(404).json({msg:"Comment not found"});
+    }
+
+    if(comment.user.toString()!==req.user.id){
+      return res.status(401).json({msg:"Not authorized"});
+    }
+    
+    // comment_index = post.comments.map(item=>item.id).indexOf(req.params.comment_id);
+    // post.comments.splice(comment_index,1);
+    post.comments = post.comments.filter(item=>item.id!==req.params.comment_id);
+
+
+
+    await post.save();
+    res.json(post.comments);
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+})
+
+
+
+
 
 module.exports=router;
