@@ -1,3 +1,17 @@
+//Container
+.container {
+  background: url('../img/backimage.jpg') repeat center center / cover;
+  height: 100vh;
+  min-height: 100vh;
+  //max-width: $max-width;
+  overflow: auto;
+  .in-dark {
+    margin-top: 10rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+}
 .x-large {
   font-size: 6rem;
   margin-bottom: 1rem;
@@ -11,13 +25,18 @@
 }
 //Buttons
 .btn {
-  margin: 2rem;
+  margin: 0.75rem;
+  border: none;
+  font-family: 'Gloria Hallelujah', cursive;
   font-size: 3rem;
+  padding: 0 0.75rem;
   display: inline-block;
   transition: color 0.5s, transform 0.5s;
+  background-color: Transparent;
+  color: white;
   &:hover {
-    transform: scale(2);
-    color: white;
+    transform: scale(1.5);
+    color: $primary-color;
   }
 }
 //Backgrounds
@@ -52,4 +71,32 @@
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.7);
+}
+
+.form {
+  &-group {
+    input {
+      width: 80%;
+      padding: 2rem;
+      margin: 1rem;
+      border: white;
+    }
+    i {
+      color: $primary-color;
+    }
+  }
+}
+
+.signin {
+  display: inline-block;
+  transition: color 0.5s, transform 0.5s;
+  color: white;
+  &:hover {
+    transform: scale(2);
+    color: $primary-color;
+  }
+}
+
+.my-1 {
+  color: white;
 }
