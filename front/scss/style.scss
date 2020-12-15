@@ -44,6 +44,7 @@ img {
   opacity: 0.9;
   ul {
     display: flex;
+    flex-wrap: wrap;
   }
   a {
     color: white;
@@ -122,10 +123,14 @@ img {
     border: solid $primary-color 1px;
     .repo {
       display: flex;
-      //2020年12月14日01:42:01 working on this
+      margin: 5rem;
+      align-items: center;
+      justify-content: center;
       & > div:first-child {
-        flex: 7;
-        flex-basis: 1%;
+        flex: 9;
+      }
+      & > div:last-child {
+        flex: 1;
       }
     }
   }
@@ -137,4 +142,8 @@ img {
 .profile-grid {
   display: grid;
   grid-template-areas: 'top top' 'about about' 'exp edu' 'github github';
+}
+
+.badge {
+  margin-left: 5rem;
 }

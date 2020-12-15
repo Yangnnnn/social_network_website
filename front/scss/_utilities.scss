@@ -1,10 +1,10 @@
 //Container
 .container {
-  // background: url('../img/backimage.jpg') no-repeat center center / cover;
-  // height: 100vh;
-  //max-width: $max-width;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin-top: 8rem;
+
   .in-dark {
     align-items: center;
     justify-content: center;
@@ -28,15 +28,22 @@
   margin: 0.75rem;
   border: none;
   font-family: 'Gloria Hallelujah', cursive;
-  font-size: 3rem;
+  font-size: 1rem;
   padding: 0 0.75rem;
   display: inline-block;
   transition: color 0.5s, transform 0.5s;
   background-color: Transparent;
-  color: white;
+  color: black;
   &:hover {
     transform: scale(1.5);
     color: $primary-color;
+  }
+  &-danger {
+    background-color: $danger-color;
+    color: white;
+    border: none;
+    font-size: 1.3rem;
+    padding: 0 0.9rem;
   }
 }
 //Backgrounds
@@ -72,15 +79,47 @@
 }
 
 .form {
+  .fa-twitter {
+    color: #38a1f3;
+  }
+  .fa-facebook {
+    color: #3b5998;
+  }
+  .fa-instagram {
+    color: #f09433;
+  }
+  .fa-youtube {
+    color: #c4302b;
+  }
+  .fa-linkedin {
+    color: #0077b5;
+  }
   &-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
     input {
       width: 80%;
       padding: 2rem;
       margin: 1rem;
-      border: white;
+      border: black 1px solid;
+      border-radius: 25px;
     }
     i {
       color: $primary-color;
+    }
+    .status {
+      font-size: 2rem;
+      border-radius: 25px;
+    }
+    textarea {
+      width: 80%;
+      padding: 2rem;
+      margin: 1rem;
+      border: black 1px solid;
+      border-radius: 25px;
     }
   }
 }
@@ -125,4 +164,21 @@
   height: 1px;
   background-color: white;
   margin: 1.5rem;
+}
+
+table {
+  margin: 1rem;
+  th {
+    padding: 1rem;
+    background-color: lightgrey;
+  }
+  td {
+    padding: 1rem;
+    text-align: left;
+  }
+}
+
+input[type='submit'] {
+  border: none;
+  width: auto;
 }
